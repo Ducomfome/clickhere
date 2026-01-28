@@ -3,89 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acessar Conteúdo Exclusivo</title>
+    <title>Ação Necessária</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+            height: 100vh;
+            overflow: hidden; /* Trava rolagem */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #000; /* Fundo preto combina mais com "exclusive content" */
-            color: #fff;
             text-align: center;
+        }
+
+        /* TELA DE TUTORIAL (Só aparece no TikTok) */
+        #tiktok-wall {
+            display: none; /* Escondido por padrão, aparece via JS */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Seta animada apontando para os 3 pontinhos (Canto Superior Direito) */
+        .arrow-guide {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 50px;
+            color: #e60023; /* Vermelho TikTok */
+            animation: bounce 1.5s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-10px, 10px); } /* Aponta para o canto */
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fff;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .step {
+            background: #222;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #333;
+            text-align: left;
+            font-size: 16px;
+        }
+        
+        .step strong { color: #e60023; }
+
+        /* LOADER (Para quando já estiver no navegador certo) */
+        #redirecting {
+            display: none;
+            flex-direction: column;
+            align-items: center;
         }
         .loader {
             border: 4px solid #333;
-            border-top: 4px solid #e60023; /* Cor meio Fanvue/TikTok */
+            border-top: 4px solid #fff;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .btn {
-            background-color: #fff;
-            color: #000;
-            padding: 16px 32px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 18px;
-            margin-top: 20px;
-            transition: transform 0.2s;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
-        }
-        .btn:active { transform: scale(0.95); }
-        h2 { font-weight: 400; font-size: 20px; margin-bottom: 10px; }
-        p { color: #aaa; font-size: 14px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
 
-    <div class="loader"></div>
-    <h2>Abrindo conteúdo...</h2>
-    <p>Se não abrir automaticamente, clique abaixo:</p>
-    
-    <a id="manualLink" href="https://www.fanvue.com/annaclaras2" class="btn">ACESSAR AGORA</a>
+    <div id="tiktok-wall">
+        <div class="arrow-guide">↗</div> 
+
+        <h1>⚠ Acesso Restrito</h1>
+        
+        <div class="step">
+            1. Toque nos <strong>3 pontinhos</strong> ou na <strong>seta</strong> lá no topo ↗
+        </div>
+        <div class="step">
+            2. Selecione a opção <br>🌐 <strong>Abrir no Navegador</strong>
+        </div>
+
+        <p style="margin-top: 20px; color: #777; font-size: 12px;">
+            O conteúdo não pode ser exibido dentro do TikTok.
+        </p>
+    </div>
+
+    <div id="redirecting">
+        <div class="loader"></div>
+        <p>Acessando conteúdo exclusivo...</p>
+    </div>
 
     <script>
-        // SEU LINK FIXO AQUI
-        const destination = "https://www.fanvue.com/annaclaras2";
-        const cleanDestination = "www.fanvue.com/annaclaras2"; // Sem o https://
+        // CONFIGURAÇÃO
+        const targetUrl = "https://www.fanvue.com/annaclaras2";
 
-        function redirect() {
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        // DETECÇÃO DO NAVEGADOR
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const isTikTok = /TikTok/i.test(userAgent); 
 
-            // LÓGICA PARA ANDROID (Tenta forçar o Chrome externo)
-            if (/android/i.test(userAgent)) {
-                // Monta o esquema "Intent" que o Android entende
-                const intentUrl = `intent://${cleanDestination}#Intent;scheme=https;package=com.android.chrome;end`;
-                
-                // Tenta abrir via Intent
-                window.location.href = intentUrl;
-                
-                // Se falhar (ex: usuário não tem Chrome), redireciona normal após delay
-                setTimeout(() => { window.location.href = destination; }, 1000);
-            } 
-            // LÓGICA PARA IPHONE/OUTROS (Redirecionamento Padrão)
-            else {
-                window.location.href = destination;
-            }
+        // LÓGICA
+        if (isTikTok) {
+            // SE FOR TIKTOK: Mostra o muro e esconde o resto.
+            document.getElementById('tiktok-wall').style.display = 'flex';
+        } else {
+            // SE NÃO FOR TIKTOK (Ou seja, o cara já abriu no navegador):
+            document.getElementById('redirecting').style.display = 'flex';
+            
+            // Redireciona imediatamente
+            setTimeout(() => {
+                window.location.replace(targetUrl);
+            }, 500); // Meio segundo só para ele ver que funcionou
         }
-
-        // Delay curto para garantir que o script carregou e dar tempo do usuário ver algo
-        window.onload = function() {
-            setTimeout(redirect, 800); 
-        };
     </script>
 </body>
 </html>
