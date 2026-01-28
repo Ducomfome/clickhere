@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conteúdo Exclusivo</title>
     <style>
-        /* RESET E ESTRUTURA BÁSICA */
+        /* RESET */
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #000; /* Fundo preto total */
+            background-color: #000;
             color: #fff;
             height: 100vh;
             display: flex;
@@ -18,144 +18,162 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            overflow: hidden; /* Impede rolagem */
+            overflow: hidden;
         }
 
-        /* --- TELA 1: O BLOQUEIO (TUTORIAL) --- */
+        /* TELA DE BLOQUEIO (TUTORIAL) */
         #tiktok-wall {
-            display: none; /* Escondido por padrão */
+            display: none; /* Começa escondido, JS ativa se necessário */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0, 0.98); /* Quase sólido */
-            z-index: 1000;
+            background: rgba(0,0,0, 1);
+            z-index: 9999;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            box-sizing: border-box;
         }
 
-        /* Seta Animada */
+        /* Seta Gigante Animada */
         .arrow-guide {
             position: absolute;
-            top: 15px;      /* Distância do topo */
-            right: 25px;    /* Distância da direita (alinha com menu do TikTok) */
-            font-size: 60px;
-            color: #ff0050; /* Cor rosa/vermelho do TikTok */
-            animation: bounceArrow 1.5s infinite;
+            top: 10px;
+            right: 20px;
+            font-size: 70px;
+            color: #fe2c55; /* Vermelho Oficial TikTok */
+            animation: bounce 1.2s infinite ease-in-out;
             line-height: 1;
+            font-weight: bold;
         }
 
-        @keyframes bounceArrow {
+        @keyframes bounce {
             0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-10px, 10px); } /* Move na diagonal apontando pro canto */
+            50% { transform: translate(-15px, 15px); }
         }
 
         h1 {
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 30px;
+            font-size: 24px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            color: #fff;
         }
 
-        .instruction-box {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 15px;
-            padding: 20px;
-            width: 100%;
-            max-width: 320px;
-            text-align: left;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .box {
+            background: #121212;
+            border: 2px solid #fe2c55;
+            padding: 25px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 0 20px rgba(254, 44, 85, 0.2);
         }
 
         .step {
-            margin-bottom: 15px;
             font-size: 18px;
-            line-height: 1.4;
+            margin-bottom: 15px;
+            text-align: left;
+            line-height: 1.5;
         }
 
-        .step strong {
-            color: #ff0050;
-            font-weight: 700;
-        }
+        .step strong { color: #fe2c55; }
+        .icon { margin-right: 8px; font-size: 20px; }
 
-        .icon { font-size: 22px; margin-right: 5px; vertical-align: middle; }
-
-        /* --- TELA 2: CARREGANDO (Navegador Real) --- */
+        /* TELA DE REDIRECIONAMENTO (NAVEGADOR REAL) */
         #redirecting {
-            display: none; /* Escondido por padrão */
+            display: none;
             flex-direction: column;
             align-items: center;
         }
-
-        .spinner {
+        .loader {
             width: 50px;
             height: 50px;
             border: 5px solid #333;
-            border-top: 5px solid #fff;
+            border-top: 5px solid #fe2c55;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            animation: spin 0.8s linear infinite;
         }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+        /* DEBUG (Pequeno no rodapé) */
+        #debug-info {
+            position: absolute;
+            bottom: 5px;
+            font-size: 10px;
+            color: #444;
+            width: 100%;
+            word-break: break-all;
+            padding: 0 10px;
+        }
     </style>
 </head>
 <body>
 
     <div id="tiktok-wall">
         <div class="arrow-guide">↗</div>
-
-        <h1>Acesso Bloqueado</h1>
         
-        <div class="instruction-box">
+        <h1>Atenção</h1>
+        
+        <div class="box">
             <div class="step">
-                <span class="icon">👆</span> Toque nos <strong>3 pontinhos</strong> ou na seta lá em cima.
+                <span class="icon">⚠️</span>O TikTok bloqueia este tipo de conteúdo.
             </div>
-            <div class="step" style="margin-bottom: 0;">
-                <span class="icon">🌐</span> Escolha a opção<br>
-                <strong>Abrir no Navegador</strong>
+            <div class="step">
+                <span class="icon">👇</span>Para liberar o acesso:
+            </div>
+            <div class="step">
+                1. Toque nos <strong>3 pontinhos</strong> (ou seta) lá no topo.
+            </div>
+            <div class="step" style="margin-bottom:0;">
+                2. Selecione <strong>Abrir no Navegador</strong>.
             </div>
         </div>
-
-        <p style="margin-top: 30px; color: #666; font-size: 13px;">
-            Este conteúdo não carrega dentro do aplicativo.
-        </p>
     </div>
 
     <div id="redirecting">
-        <div class="spinner"></div>
-        <h2>Entrando...</h2>
+        <div class="loader"></div>
+        <p style="margin-top: 20px; opacity: 0.7;">Verificando navegador...</p>
     </div>
 
+    <div id="debug-info"></div>
+
     <script>
-        // CONFIGURAÇÃO
-        const targetUrl = "https://www.fanvue.com/annaclaras2";
+        // CONFIGURAÇÃO DO LINK
+        const destination = "https://www.fanvue.com/annaclaras2";
 
-        // VERIFICAÇÃO
-        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        // Detecta TikTok especificamente
-        const isTikTok = /TikTok/i.test(userAgent); 
+        // 1. Pega a assinatura do navegador
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        document.getElementById('debug-info').innerText = ua; // Mostra na tela p/ debug
 
-        if (isTikTok) {
-            // Cenario 1: É TikTok -> Mostra o tutorial e TRAVA.
+        // 2. Lista de palavras que indicam "Navegador Preso" (WebView/TikTok)
+        // Adicionei 'wv' (WebView Android) e 'ByteDance' (Dono do TikTok)
+        const rules = [
+            'TikTok', 
+            'ByteDance', 
+            'Musical_ly',
+            'wv', 
+            'Instagram', 
+            'FBAN', 
+            'FBAV'
+        ];
+
+        // Verifica se alguma das palavras proibidas está no User Agent
+        const isBlocked = rules.some(rule => new RegExp(rule, 'i').test(ua));
+
+        // 3. Executa a lógica
+        if (isBlocked) {
+            // BLOQUEADO: Mostra o tutorial
             document.getElementById('tiktok-wall').style.display = 'flex';
         } else {
-            // Cenario 2: Não é TikTok (já abriu no navegador) -> Redireciona.
+            // LIBERADO: Mostra loader e redireciona
             document.getElementById('redirecting').style.display = 'flex';
-            
-            // Pequeno delay para a animação aparecer antes de ir
             setTimeout(() => {
-                window.location.replace(targetUrl);
-            }, 300); 
+                window.location.replace(destination);
+            }, 500);
         }
     </script>
-
 </body>
 </html>
