@@ -6,82 +6,89 @@
     <title>Acessar Telegram</title>
     <style>
         :root {
-            --roxo-destaque: #8a2be2;
-            --bg-preto: #0d0d0d;
-            --card-cinza: #1a1a1a;
+            --roxo: #8a2be2;
+            --bg: #0d0d0d;
+            --card: #1a1a1a;
+            --borda-card: #2a1a3a;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
 
         body {
             font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-preto);
+            background-color: var(--bg);
             color: #fff;
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         #muro-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* HEADER E SELECTOR */
+        /* Idioma */
         .header {
             width: 100%;
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             position: relative;
         }
 
-        .lang-selector {
+        .lang-btn {
             background: #262626;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 14px;
             border: 1px solid #333;
+            font-weight: 600;
         }
 
-        .dropdown-content {
+        .dropdown {
             display: none;
             position: absolute;
-            top: 40px;
+            top: 45px;
             right: 0;
             background: #262626;
-            border-radius: 8px;
-            z-index: 10;
+            border-radius: 10px;
+            z-index: 100;
             border: 1px solid #444;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .dropdown-content div {
-            padding: 10px 20px;
+        .dropdown div {
+            padding: 12px 25px;
             cursor: pointer;
-            white-space: nowrap;
+            border-bottom: 1px solid #333;
         }
 
+        .dropdown div:last-child { border-bottom: none; }
+
+        /* Estética do Muro */
         .main-title {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .preview-area {
+        .preview-box {
             width: 100%;
             aspect-ratio: 16/10;
             background: #000;
-            border-radius: 12px;
+            border-radius: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -89,22 +96,24 @@
             border: 1px solid #222;
         }
 
-        .check-circle {
-            width: 95px;
-            height: 95px;
-            background: #5bdca4;
+        .check-icon {
+            width: 90px;
+            height: 90px;
+            background: #4ade80;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 50px;
+            font-size: 45px;
             color: #fff;
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.2);
         }
 
-        .instruction-card {
-            background: var(--card-cinza);
-            border: 1.5px solid #2a1a3a;
-            border-left: 5px solid var(--roxo-destaque);
+        /* Card de Instruções */
+        .tutorial-card {
+            background: var(--card);
+            border: 1.5px solid var(--borda-card);
+            border-left: 5px solid var(--roxo);
             border-radius: 18px;
             padding: 25px;
             width: 100%;
@@ -112,22 +121,22 @@
             text-align: left;
         }
 
-        .instruction-card p {
+        .tutorial-card p {
             margin-bottom: 15px;
             font-size: 15px;
             font-weight: 600;
             line-height: 1.4;
         }
 
-        .instruction-card p:last-child { margin-bottom: 0; }
+        .tutorial-card p:last-child { margin-bottom: 0; }
 
-        .purple-bold {
+        .purple-tag {
             color: #a855f7;
             font-weight: 800;
         }
 
-        /* BOTÃO DINÂMICO */
-        #btn-action {
+        /* Botão de Ação */
+        #main-btn {
             width: 100%;
             background: #222;
             padding: 18px;
@@ -138,155 +147,158 @@
             border: none;
             color: #fff;
             font-weight: bold;
+            transition: all 0.3s ease;
             text-transform: uppercase;
+            font-size: 15px;
         }
 
-        .btn-ready {
-            background: var(--roxo-destaque) !important;
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+        .btn-active {
+            background: var(--roxo) !important;
             cursor: pointer;
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.4);
         }
 
-        .spinner {
-            width: 25px;
-            height: 25px;
+        .loader {
+            width: 24px;
+            height: 24px;
             border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid #666;
+            border-top: 3px solid #777;
             border-radius: 50%;
-            animation: rotate 1s linear infinite;
+            animation: spin 1s linear infinite;
         }
 
-        .footer-link {
+        .footer-text {
             margin-top: 25px;
             color: #a855f7;
             font-weight: 800;
             text-transform: uppercase;
             font-size: 13px;
-            text-decoration: none;
+            letter-spacing: 0.5px;
         }
 
-        @keyframes rotate { to { transform: rotate(360deg); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div id="muro-container">
         <div class="header">
-            <div class="lang-selector" onclick="toggleDD()">
-                <span id="flag-now">🇧🇷</span> <span id="label-now">PT</span>
+            <div class="lang-btn" onclick="toggleDropdown()">
+                <span id="cur-flag">🇧🇷</span> <span id="cur-lang">PT</span>
             </div>
-            <div class="dropdown-content" id="myDD">
-                <div onclick="setLang('pt')">🇧🇷 PT</div>
-                <div onclick="setLang('es')">🇪🇸 ES</div>
-                <div onclick="setLang('en')">🇺🇸 EN</div>
+            <div class="dropdown" id="lang-dd">
+                <div onclick="updateLang('pt')">🇧🇷 PT</div>
+                <div onclick="updateLang('es')">🇪🇸 ES</div>
+                <div onclick="updateLang('en')">🇺🇸 EN</div>
             </div>
         </div>
 
-        <div class="main-title" id="t-main">SIGA O TUTORIAL</div>
+        <div class="main-title" id="txt-title">SIGA O TUTORIAL</div>
 
-        <div class="preview-area">
-            <div class="check-circle">✓</div>
+        <div class="preview-box">
+            <div class="check-icon">✓</div>
         </div>
 
-        <div class="instruction-card" id="t-steps"></div>
+        <div class="tutorial-card" id="txt-steps">
+            </div>
 
-        <button id="btn-action">
-            <div class="spinner" id="btn-loader"></div>
+        <button id="main-btn">
+            <div class="loader" id="btn-loader"></div>
             <span id="btn-text" style="display:none;">ACESSAR AGORA</span>
         </button>
 
-        <div class="footer-link" id="t-footer">ABRA NO NAVEGADOR PARA CONTINUAR</div>
+        <div class="footer-text" id="txt-footer">ABRA NO NAVEGADOR PARA CONTINUAR</div>
     </div>
 
     <script>
-        const linkDestino = "https://t.me/marianasapequinha_bot";
+        const REDIRECT_URL = "https://t.me/marianasapequinha_bot";
 
-        const langData = {
+        const translations = {
             pt: {
-                main: "SIGA O TUTORIAL",
+                title: "SIGA O TUTORIAL",
                 footer: "ABRA NO NAVEGADOR PARA CONTINUAR",
-                ready: "ACESSAR AGORA",
-                flag: "🇧🇷",
+                btn: "ACESSAR AGORA",
                 steps: [
-                    "1) TOQUE NOS <span class='purple-bold'>TRÊS PONTINHOS</span> (CANTO SUPERIOR)",
-                    "2) ESCOLHA <span class='purple-bold'>\"ABRIR NO NAVEGADOR\"</span>",
-                    "3) O BOTÃO FICARÁ <span class='purple-bold'>ROXO AUTOMATICAMENTE</span>"
+                    "1) TOQUE NOS <span class='purple-tag'>TRÊS PONTINHOS</span> (SUPERIOR)",
+                    "2) ESCOLHA <span class='purple-tag'>\"ABRIR NO NAVEGADOR\"</span>",
+                    "3) O BOTÃO FICARÁ <span class='purple-tag'>ROXO AUTOMATICAMENTE</span>"
                 ]
             },
             es: {
-                main: "SIGA EL TUTORIAL",
+                title: "SIGA EL TUTORIAL",
                 footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR",
-                ready: "ACCEDER AHORA",
-                flag: "🇪🇸",
+                btn: "ACCEDER AHORA",
                 steps: [
-                    "1) TOQUE LOS <span class='purple-bold'>TRES PUNTOS</span> (ESQUINA SUPERIOR)",
-                    "2) ELIJA <span class='purple-bold'>\"ABRIR EN EL NAVEGADOR\"</span>",
-                    "3) EL BOTÓN SE VOLVERÁ <span class='purple-bold'>PÚRPURA AUTOMÁTICAMENTE</span>"
+                    "1) TOQUE LOS <span class='purple-tag'>TRES PUNTOS</span> (SUPERIOR)",
+                    "2) ELIJA <span class='purple-tag'>\"ABRIR EN EL NAVEGADOR\"</span>",
+                    "3) EL BOTÓN SE VOLVERÁ <span class='purple-tag'>PÚRPURA AUTOMÁTICAMENTE</span>"
                 ]
             },
             en: {
-                main: "FOLLOW THE TUTORIAL",
+                title: "FOLLOW THE TUTORIAL",
                 footer: "OPEN IN BROWSER TO CONTINUE",
-                ready: "ACCESS NOW",
-                flag: "🇺🇸",
+                btn: "ACCESS NOW",
                 steps: [
-                    "1) TAP THE <span class='purple-bold'>THREE DOTS</span> (TOP CORNER)",
-                    "2) CHOOSE <span class='purple-bold'>\"OPEN IN BROWSER\"</span>",
-                    "3) THE BUTTON WILL TURN <span class='purple-bold'>PURPLE AUTOMATICALLY</span>"
+                    "1) TAP THE <span class='purple-tag'>THREE DOTS</span> (TOP CORNER)",
+                    "2) CHOOSE <span class='purple-tag'>\"OPEN IN BROWSER\"</span>",
+                    "3) THE BUTTON WILL TURN <span class='purple-tag'>PURPLE AUTOMATICALLY</span>"
                 ]
             }
         };
 
-        function toggleDD() {
-            const dd = document.getElementById('myDD');
+        function toggleDropdown() {
+            const dd = document.getElementById('lang-dd');
             dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
         }
 
-        function setLang(l) {
-            document.getElementById('flag-now').innerText = langData[l].flag;
-            document.getElementById('label-now').innerText = l.toUpperCase();
-            document.getElementById('t-main').innerText = langData[l].main;
-            document.getElementById('t-footer').innerText = langData[l].footer;
-            document.getElementById('t-steps').innerHTML = langData[l].steps.map(s => `<p>${s}</p>`).join('');
-            document.getElementById('myDD').style.display = 'none';
+        function updateLang(lang) {
+            const d = translations[lang];
+            document.getElementById('txt-title').innerText = d.title;
+            document.getElementById('txt-footer').innerText = d.footer;
+            document.getElementById('txt-steps').innerHTML = d.steps.map(s => `<p>${s}</p>`).join('');
+            document.getElementById('cur-lang').innerText = lang.toUpperCase();
+            document.getElementById('cur-flag').innerText = lang === 'pt' ? '🇧🇷' : lang === 'es' ? '🇪🇸' : '🇺🇸';
+            document.getElementById('btn-text').innerText = d.btn;
+            document.getElementById('lang-dd').style.display = 'none';
+        }
+
+        // --- SISTEMA DE DETECÇÃO ANTI-TIKTOK ---
+        function runProtection() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
             
-            // Se o botão já estiver liberado, atualiza o texto dele também
-            if(document.getElementById('btn-text').style.display !== 'none') {
-                document.getElementById('btn-text').innerText = langData[l].ready;
+            // Detecta se está em navegadores internos (TikTok, Instagram, FB, etc)
+            const isAppBrowser = /TikTok|Instagram|FBAN|FBAV|Messenger|Line|Snapchat/i.test(ua);
+            
+            // Checa se é um WebView genérico (iPhone/Android)
+            const isWebView = /iPhone|iPod|iPad/.test(ua) ? (!window.navigator.standalone && !/Safari/.test(ua)) : /wv/.test(ua);
+
+            if (!isAppBrowser && !isWebView) {
+                // ESTÁ NO NAVEGADOR REAL (Chrome/Safari)
+                const btn = document.getElementById('main-btn');
+                btn.classList.add('btn-active');
+                document.getElementById('btn-loader').style.display = 'none';
+                document.getElementById('btn-text').style.display = 'block';
+
+                // Ativa o clique
+                btn.onclick = () => { window.location.href = REDIRECT_URL; };
+
+                // Redireciona sozinho após 1.2 segundos
+                setTimeout(() => {
+                    window.location.replace(REDIRECT_URL);
+                }, 1200);
+            } else {
+                // ESTÁ PRESO NO TIKTOK
+                console.log("Ambiente restrito detectado. Aguardando navegador externo.");
             }
         }
 
-        // --- LÓGICA DE BLOQUEIO ---
-        const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const isTikTok = /TikTok|Instagram|FBAV|FBAN/i.test(ua);
+        // Inicializar
+        updateLang('pt');
+        runProtection();
 
-        if (!isTikTok) {
-            // SE ESTIVER NO NAVEGADOR REAL:
-            // 1. Muda o botão para Roxo
-            document.getElementById('btn-action').classList.add('btn-ready');
-            document.getElementById('btn-loader').style.display = 'none';
-            document.getElementById('btn-text').style.display = 'block';
-            document.getElementById('btn-text').innerText = langData.pt.ready;
-            
-            // 2. Redireciona automaticamente após 1 segundo
-            setTimeout(() => {
-                window.location.href = linkDestino;
-            }, 1000);
-
-            // 3. Permite clicar no botão também
-            document.getElementById('btn-action').onclick = function() {
-                window.location.href = linkDestino;
-            };
-        } else {
-            // SE ESTIVER NO TIKTOK:
-            // O botão fica cinza com o spinner infinito, forçando a saída.
-            console.log("Bloqueado no TikTok. Siga o tutorial.");
-        }
-
-        setLang('pt');
-        
-        window.onclick = function(e) { 
-            if(!e.target.closest('.header')) document.getElementById('myDD').style.display='none'; 
+        // Fechar dropdown ao clicar fora
+        window.onclick = (e) => {
+            if (!e.target.closest('.header')) document.getElementById('lang-dd').style.display = 'none';
         };
     </script>
 </body>
