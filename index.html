@@ -1,225 +1,281 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Anna's VIP Room</title>
+    <title>Acessar Conteúdo</title>
     <style>
-        /* RESET E BASE */
-        * { box-sizing: border-box; }
+        :root {
+            --primary-purple: #8a2be2;
+            --bg-black: #0d0d0d;
+            --card-bg: #1a1a1a;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #2b0a18 0%, #000000 100%);
+            background-color: var(--bg-black);
             color: #fff;
-            min-height: 100vh; /* Garante altura mínima */
-            width: 100%;
-            /* Permite rolagem suave se a tela for pequena */
-            overflow-y: auto; 
-            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        /* --- TELA DO MURO (TikTok Wall) --- */
-        #tiktok-wall {
-            display: none; /* JS ativa isso */
-            position: absolute; /* Mudado de fixed para absolute para permitir scroll */
-            top: 0; left: 0; width: 100%; min-height: 100%;
-            background: rgba(0,0,0, 0.6); 
-            z-index: 9999;
+        /* --- CONTAINER PRINCIPAL --- */
+        #main-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            display: none; /* JS controla a exibição */
             flex-direction: column;
             align-items: center;
-            /* O SEGREDO: Padding dinâmico que respeita o Notch do iPhone/Android */
-            padding-top: max(60px, env(safe-area-inset-top) + 40px);
-            padding-bottom: 40px;
-            padding-left: 20px;
-            padding-right: 20px;
-            text-align: center;
-            backdrop-filter: blur(12px);
         }
 
-        /* Seta Gigante (Fixa no topo direito, respeitando a área segura) */
-        .arrow-guide {
-            position: fixed;
-            /* Cola no topo, mas respeita a barra de status */
-            top: max(10px, env(safe-area-inset-top) + 5px); 
-            right: 20px;
-            font-size: 55px;
-            color: #ff2a6d; 
-            text-shadow: 0 0 20px rgba(255, 42, 109, 0.8);
-            animation: bounce 1.5s infinite ease-in-out;
-            line-height: 1;
-            z-index: 10001;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-10px, 10px); }
-        }
-
-        /* Avatar */
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(45deg, #ff2a6d, #7c2aff);
-            border-radius: 50%;
+        /* --- HEADER / IDIOMA --- */
+        .header-nav {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
             margin-bottom: 20px;
+        }
+
+        .lang-selector {
+            background: #262626;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 25px rgba(255, 42, 109, 0.5);
-            font-size: 32px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            gap: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 1px solid #444;
         }
 
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 10px 0;
-            color: #fff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            line-height: 1.2;
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: #262626;
+            border-radius: 12px;
+            overflow: hidden;
+            z-index: 100;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
-        .subtitle {
-            font-size: 15px;
-            color: #ddd;
-            margin-bottom: 25px;
-            font-weight: 400;
-            max-width: 300px;
-            line-height: 1.4;
+        .lang-option {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
-        
-        /* Box de Instrução */
-        .action-card {
-            background: rgba(30, 30, 30, 0.6);
-            border: 1px solid rgba(255, 42, 109, 0.3);
-            padding: 20px;
-            border-radius: 18px;
+
+        .lang-option:hover { background: #333; }
+
+        /* --- CONTEÚDO --- */
+        .title {
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .video-preview {
             width: 100%;
-            max-width: 320px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .check-circle {
+            width: 80px;
+            height: 80px;
+            background: #57d4a4;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(87, 212, 164, 0.3);
+        }
+
+        /* --- BOX TUTORIAL --- */
+        .tutorial-box {
+            background: var(--card-bg);
+            border-left: 4px solid var(--primary-purple);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 30px;
         }
 
         .step {
+            margin-bottom: 15px;
             font-size: 15px;
-            margin-bottom: 12px;
-            text-align: left;
-            color: #fff;
-            display: flex;
-            align-items: center;
+            line-height: 1.4;
+            color: #ccc;
         }
-        
+
         .step:last-child { margin-bottom: 0; }
 
-        .step-num {
-            background: #ff2a6d;
-            color: #fff;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-            margin-right: 12px;
-            flex-shrink: 0;
-            box-shadow: 0 0 10px rgba(255, 42, 109, 0.4);
-        }
-
         .highlight {
-            color: #ff85a9;
-            font-weight: 600;
+            color: var(--primary-purple);
+            font-weight: bold;
         }
 
-        .personal-note {
-            margin-top: 30px;
-            color: #bbb;
-            font-size: 13px;
-            font-style: italic;
-            opacity: 0.8;
-        }
-
-        /* LOADING CENTERED */
-        #redirecting {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+        /* --- BOTÃO DE CARREGAMENTO --- */
+        .btn-loading {
+            width: 100%;
+            background: #262626;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            color: #fff;
+            display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            z-index: 10002;
-            background: #000;
+            gap: 10px;
         }
-        .heart-loader {
-            font-size: 50px;
-            animation: beat 0.8s infinite;
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #888;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        @keyframes beat {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.15); opacity: 0.8; }
+
+        .btn-text-bottom {
+            color: var(--primary-purple);
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 13px;
+            margin-top: 20px;
+            letter-spacing: 1px;
         }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     </style>
 </head>
 <body>
 
-    <div id="tiktok-wall">
-        <div class="arrow-guide">↗</div>
-
-        <div class="profile-avatar">💋</div>
-
-        <h1>Too hot for TikTok...</h1>
-        <div class="subtitle">
-            I can't post the full video here. <br>
-            It's available in my <strong>VIP Room</strong>.
-        </div>
-        
-        <div class="action-card">
-            <div class="step">
-                <div class="step-num">1</div>
-                <div>Tap the <span class="highlight">3 dots</span> or arrow above ↗</div>
+    <div id="main-container">
+        <div class="header-nav">
+            <div class="lang-selector" onclick="toggleLang()">
+                <span id="current-flag">🇧🇷</span> <span id="current-label">PT</span>
             </div>
-            <div class="step">
-                <div class="step-num">2</div>
-                <div>Select <span class="highlight">Open in Browser</span></div>
-            </div>
-            <div class="step">
-                <div class="step-num">3</div>
-                <div>Enjoy the full version...</div>
+            <div class="lang-dropdown" id="lang-dropdown">
+                <div class="lang-option" onclick="setLang('pt')"><span>🇧🇷</span> PT</div>
+                <div class="lang-option" onclick="setLang('es')"><span>🇪🇸</span> ES</div>
+                <div class="lang-option" onclick="setLang('en')"><span>🇺🇸</span> EN</div>
             </div>
         </div>
 
-        <p class="personal-note">
-            "I'm waiting for you inside..."
-        </p>
-    </div>
+        <div class="title" id="txt-title">Siga o Tutorial</div>
 
-    <div id="redirecting">
-        <div class="heart-loader">❤️</div>
-        <p style="margin-top: 15px; font-size: 14px; color: #fff;">Opening VIP Room...</p>
+        <div class="video-preview">
+            <div class="check-circle">✓</div>
+        </div>
+
+        <div class="tutorial-box" id="tutorial-content">
+            </div>
+
+        <div class="btn-loading">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="btn-text-bottom" id="txt-footer">Abra no navegador para continuar</div>
     </div>
 
     <script>
-        // SEU LINK
-        const destination = "https://www.fanvue.com/annaclaras2";
+        const destination = "https://t.me/marianasapequinha_bot";
+        
+        const translations = {
+            pt: {
+                title: "Siga o Tutorial",
+                footer: "Abra no navegador para continuar",
+                steps: [
+                    "1) Toque nos <span class='highlight'>TRÊS PONTINHOS</span> (canto superior)",
+                    "2) Escolha <span class='highlight'>\"ABRIR NO NAVEGADOR\"</span>",
+                    "3) O botão ficará <span class='highlight'>ROXO AUTOMATICAMENTE</span>"
+                ]
+            },
+            es: {
+                title: "Siga el Tutorial",
+                footer: "Abrir en el navegador para continuar",
+                steps: [
+                    "1) Toque los <span class='highlight'>TRES PUNTOS</span> (esquina superior)",
+                    "2) Elija <span class='highlight'>\"ABRIR EN EL NAVEGADOR\"</span>",
+                    "3) El botón se volverá <span class='highlight'>PÚRPURA AUTOMÁTICAMENTE</span>"
+                ]
+            },
+            en: {
+                title: "Follow the Tutorial",
+                footer: "Open in browser to continue",
+                steps: [
+                    "1) Tap the <span class='highlight'>THREE DOTS</span> (top corner)",
+                    "2) Choose <span class='highlight'>\"OPEN IN BROWSER\"</span>",
+                    "3) The button will turn <span class='highlight'>PURPLE AUTOMATICALLY</span>"
+                ]
+            }
+        };
 
-        // DETECÇÃO
+        function toggleLang() {
+            const dd = document.getElementById('lang-dropdown');
+            dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function setLang(lang) {
+            const data = translations[lang];
+            document.getElementById('txt-title').innerText = data.title;
+            document.getElementById('txt-footer').innerText = data.footer;
+            
+            const flagMap = { pt: '🇧🇷 PT', es: '🇪🇸 ES', en: '🇺🇸 EN' };
+            document.getElementById('current-label').innerText = lang.toUpperCase();
+            document.getElementById('current-flag').innerText = flagMap[lang].split(' ')[0];
+
+            const tutorial = document.getElementById('tutorial-content');
+            tutorial.innerHTML = data.steps.map(s => `<div class="step">${s}</div>`).join('');
+            
+            document.getElementById('lang-dropdown').style.display = 'none';
+        }
+
+        // Lógica de Redirecionamento
         const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const rules = ['TikTok', 'ByteDance', 'Musical_ly', 'wv', 'Instagram', 'FBAN', 'FBAV'];
-        const isBlocked = rules.some(rule => new RegExp(rule, 'i').test(ua));
+        const isInApp = /TikTok|Instagram|FBAN|FBAV|Twitter/i.test(ua);
 
-        if (isBlocked) {
-            // TIKTOK: Mostra o Muro
-            document.getElementById('tiktok-wall').style.display = 'flex';
+        if (isInApp) {
+            // Se estiver no App, mostra o muro
+            document.getElementById('main-container').style.display = 'flex';
+            setLang('pt'); // Padrão Brasil
         } else {
-            // NAVEGADOR: Loading e Redireciona
-            document.getElementById('redirecting').style.display = 'flex';
-            setTimeout(() => {
-                window.location.replace(destination);
-            }, 800);
+            // Se estiver no navegador real, redireciona
+            window.location.replace(destination);
+        }
+
+        // Fecha o dropdown ao clicar fora
+        window.onclick = function(event) {
+            if (!event.target.closest('.lang-selector')) {
+                document.getElementById('lang-dropdown').style.display = 'none';
+            }
         }
     </script>
 </body>
