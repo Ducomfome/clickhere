@@ -26,7 +26,7 @@
             width: 100%;
             max-width: 400px;
             padding: 20px;
-            display: flex; /* Forçado para aparecer sempre no teste */
+            display: flex;
             flex-direction: column;
             align-items: center;
         }
@@ -69,7 +69,6 @@
             white-space: nowrap;
         }
 
-        /* TEXTO SUPERIOR */
         .main-title {
             font-size: 19px;
             font-weight: 800;
@@ -78,7 +77,6 @@
             letter-spacing: 1px;
         }
 
-        /* ÁREA DO VÍDEO / CHECK */
         .preview-area {
             width: 100%;
             aspect-ratio: 16/10;
@@ -103,7 +101,6 @@
             color: #fff;
         }
 
-        /* CARD DE INSTRUÇÕES (IGUAL A PRINT) */
         .instruction-card {
             background: var(--card-cinza);
             border: 1.5px solid #2a1a3a;
@@ -129,8 +126,8 @@
             font-weight: 800;
         }
 
-        /* BOTÃO E LOADING */
-        .action-btn {
+        /* BOTÃO DINÂMICO */
+        #btn-action {
             width: 100%;
             background: #222;
             padding: 18px;
@@ -139,6 +136,14 @@
             justify-content: center;
             align-items: center;
             border: none;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .btn-ready {
+            background: var(--roxo-destaque) !important;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
             cursor: pointer;
         }
 
@@ -183,16 +188,14 @@
             <div class="check-circle">✓</div>
         </div>
 
-        <div class="instruction-card" id="t-steps">
-            </div>
+        <div class="instruction-card" id="t-steps"></div>
 
-        <button class="action-btn" onclick="goToTelegram()">
-            <div class="spinner"></div>
+        <button id="btn-action">
+            <div class="spinner" id="btn-loader"></div>
+            <span id="btn-text" style="display:none;">ACESSAR AGORA</span>
         </button>
 
-        <a href="javascript:void(0)" onclick="goToTelegram()" class="footer-link" id="t-footer">
-            ABRA NO NAVEGADOR PARA CONTINUAR
-        </a>
+        <div class="footer-link" id="t-footer">ABRA NO NAVEGADOR PARA CONTINUAR</div>
     </div>
 
     <script>
@@ -202,6 +205,7 @@
             pt: {
                 main: "SIGA O TUTORIAL",
                 footer: "ABRA NO NAVEGADOR PARA CONTINUAR",
+                ready: "ACESSAR AGORA",
                 flag: "🇧🇷",
                 steps: [
                     "1) TOQUE NOS <span class='purple-bold'>TRÊS PONTINHOS</span> (CANTO SUPERIOR)",
@@ -212,6 +216,7 @@
             es: {
                 main: "SIGA EL TUTORIAL",
                 footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR",
+                ready: "ACCEDER AHORA",
                 flag: "🇪🇸",
                 steps: [
                     "1) TOQUE LOS <span class='purple-bold'>TRES PUNTOS</span> (ESQUINA SUPERIOR)",
@@ -222,6 +227,7 @@
             en: {
                 main: "FOLLOW THE TUTORIAL",
                 footer: "OPEN IN BROWSER TO CONTINUE",
+                ready: "ACCESS NOW",
                 flag: "🇺🇸",
                 steps: [
                     "1) TAP THE <span class='purple-bold'>THREE DOTS</span> (TOP CORNER)",
@@ -243,24 +249,45 @@
             document.getElementById('t-footer').innerText = langData[l].footer;
             document.getElementById('t-steps').innerHTML = langData[l].steps.map(s => `<p>${s}</p>`).join('');
             document.getElementById('myDD').style.display = 'none';
+            
+            // Se o botão já estiver liberado, atualiza o texto dele também
+            if(document.getElementById('btn-text').style.display !== 'none') {
+                document.getElementById('btn-text').innerText = langData[l].ready;
+            }
         }
 
-        function goToTelegram() {
-            window.location.href = linkDestino;
-        }
-
-        // Inicia em PT
-        setLang('pt');
-
-        // Lógica: Se não for TikTok/Instagram, redireciona após 2 segundos
+        // --- LÓGICA DE BLOQUEIO ---
         const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const isApp = /TikTok|Instagram|FBAV|FBAN/i.test(ua);
+        const isTikTok = /TikTok|Instagram|FBAV|FBAN/i.test(ua);
 
-        if (!isApp) {
+        if (!isTikTok) {
+            // SE ESTIVER NO NAVEGADOR REAL:
+            // 1. Muda o botão para Roxo
+            document.getElementById('btn-action').classList.add('btn-ready');
+            document.getElementById('btn-loader').style.display = 'none';
+            document.getElementById('btn-text').style.display = 'block';
+            document.getElementById('btn-text').innerText = langData.pt.ready;
+            
+            // 2. Redireciona automaticamente após 1 segundo
             setTimeout(() => {
-                window.location.replace(linkDestino);
-            }, 2000); // 2 segundos para o usuário ver a tela antes de ir pro bot
+                window.location.href = linkDestino;
+            }, 1000);
+
+            // 3. Permite clicar no botão também
+            document.getElementById('btn-action').onclick = function() {
+                window.location.href = linkDestino;
+            };
+        } else {
+            // SE ESTIVER NO TIKTOK:
+            // O botão fica cinza com o spinner infinito, forçando a saída.
+            console.log("Bloqueado no TikTok. Siga o tutorial.");
         }
+
+        setLang('pt');
+        
+        window.onclick = function(e) { 
+            if(!e.target.closest('.header')) document.getElementById('myDD').style.display='none'; 
+        };
     </script>
 </body>
 </html>
