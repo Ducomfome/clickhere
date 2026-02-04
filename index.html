@@ -3,35 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Acessar Conteúdo</title>
+    <title>Acessar Telegram</title>
     <style>
         :root {
-            --primary-purple: #a855f7;
-            --bg-black: #0a0a0a;
-            --card-bg: #171717;
+            --roxo-destaque: #8a2be2;
+            --bg-preto: #0d0d0d;
+            --card-cinza: #1a1a1a;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
 
         body {
             font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-black);
+            background-color: var(--bg-preto);
             color: #fff;
             display: flex;
             justify-content: center;
             min-height: 100vh;
         }
 
-        #main-container {
+        #muro-container {
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
             padding: 20px;
-            display: none; /* JS ativa como 'flex' */
+            display: flex; /* Forçado para aparecer sempre no teste */
             flex-direction: column;
             align-items: center;
         }
 
-        /* HEADER */
+        /* HEADER E SELECTOR */
         .header {
             width: 100%;
             display: flex;
@@ -40,207 +40,227 @@
             position: relative;
         }
 
-        .lang-btn {
+        .lang-selector {
             background: #262626;
-            padding: 8px 14px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
             cursor: pointer;
-            border: 1px solid #333;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            font-size: 14px;
+            border: 1px solid #333;
         }
 
-        .dropdown {
+        .dropdown-content {
             display: none;
             position: absolute;
-            top: 45px;
+            top: 40px;
             right: 0;
             background: #262626;
-            border-radius: 12px;
-            z-index: 999;
+            border-radius: 8px;
+            z-index: 10;
             border: 1px solid #444;
-            min-width: 100px;
         }
 
-        .dropdown div {
-            padding: 12px;
-            border-bottom: 1px solid #333;
-            text-align: center;
+        .dropdown-content div {
+            padding: 10px 20px;
+            cursor: pointer;
+            white-space: nowrap;
         }
 
-        /* CONTEÚDO IGUAL A PRINT */
-        .title-top {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 25px;
+        /* TEXTO SUPERIOR */
+        .main-title {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .preview-box {
+        /* ÁREA DO VÍDEO / CHECK */
+        .preview-area {
             width: 100%;
+            aspect-ratio: 16/10;
             background: #000;
-            border-radius: 20px;
-            height: 200px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 25px;
+            border: 1px solid #222;
         }
 
-        .check-icon {
-            width: 90px;
-            height: 90px;
-            background: #4ade80;
+        .check-circle {
+            width: 95px;
+            height: 95px;
+            background: #5bdca4;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 45px;
+            font-size: 50px;
+            color: #fff;
         }
 
+        /* CARD DE INSTRUÇÕES (IGUAL A PRINT) */
         .instruction-card {
-            background: var(--card-bg);
-            border-left: 5px solid var(--primary-purple);
-            border-radius: 15px;
+            background: var(--card-cinza);
+            border: 1.5px solid #2a1a3a;
+            border-left: 5px solid var(--roxo-destaque);
+            border-radius: 18px;
             padding: 25px;
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            text-align: left;
         }
 
-        .step-line {
+        .instruction-card p {
             margin-bottom: 15px;
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
+            line-height: 1.4;
         }
 
-        .purple-text { color: var(--primary-purple); font-weight: 800; }
+        .instruction-card p:last-child { margin-bottom: 0; }
 
-        /* LOADING */
-        .loading-bar {
+        .purple-bold {
+            color: #a855f7;
+            font-weight: 800;
+        }
+
+        /* BOTÃO E LOADING */
+        .action-btn {
             width: 100%;
-            background: #262626;
-            padding: 20px;
+            background: #222;
+            padding: 18px;
             border-radius: 15px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            border: none;
+            cursor: pointer;
         }
 
-        .loader-circle {
-            width: 30px;
-            height: 30px;
-            border: 3px solid #444;
-            border-top: 3px solid #888;
+        .spinner {
+            width: 25px;
+            height: 25px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #666;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: rotate 1s linear infinite;
         }
 
-        .footer-text {
+        .footer-link {
             margin-top: 25px;
-            color: var(--primary-purple);
+            color: #a855f7;
             font-weight: 800;
-            font-size: 13px;
             text-transform: uppercase;
+            font-size: 13px;
+            text-decoration: none;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes rotate { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="main-container">
+    <div id="muro-container">
         <div class="header">
-            <div class="lang-btn" onclick="document.getElementById('dd').style.display='block'">
-                <span id="flag">🇧🇷</span> <span id="lang-code">PT</span>
+            <div class="lang-selector" onclick="toggleDD()">
+                <span id="flag-now">🇧🇷</span> <span id="label-now">PT</span>
             </div>
-            <div class="dropdown" id="dd">
-                <div onclick="changeLang('pt')">🇧🇷 PT</div>
-                <div onclick="changeLang('es')">🇪🇸 ES</div>
-                <div onclick="changeLang('en')">🇺🇸 EN</div>
+            <div class="dropdown-content" id="myDD">
+                <div onclick="setLang('pt')">🇧🇷 PT</div>
+                <div onclick="setLang('es')">🇪🇸 ES</div>
+                <div onclick="setLang('en')">🇺🇸 EN</div>
             </div>
         </div>
 
-        <div class="title-top" id="txt-title">SIGA O TUTORIAL</div>
+        <div class="main-title" id="t-main">SIGA O TUTORIAL</div>
 
-        <div class="preview-box">
-            <div class="check-icon">✓</div>
+        <div class="preview-area">
+            <div class="check-circle">✓</div>
         </div>
 
-        <div class="instruction-card" id="instr">
+        <div class="instruction-card" id="t-steps">
             </div>
 
-        <div class="loading-bar">
-            <div class="loader-circle"></div>
-        </div>
+        <button class="action-btn" onclick="goToTelegram()">
+            <div class="spinner"></div>
+        </button>
 
-        <div class="footer-text" id="txt-footer">ABRA NO NAVEGADOR PARA CONTINUAR</div>
+        <a href="javascript:void(0)" onclick="goToTelegram()" class="footer-link" id="t-footer">
+            ABRA NO NAVEGADOR PARA CONTINUAR
+        </a>
     </div>
 
     <script>
-        const linkTelegram = "https://t.me/marianasapequinha_bot";
-        
-        const texts = {
+        const linkDestino = "https://t.me/marianasapequinha_bot";
+
+        const langData = {
             pt: {
-                title: "SIGA O TUTORIAL",
+                main: "SIGA O TUTORIAL",
                 footer: "ABRA NO NAVEGADOR PARA CONTINUAR",
                 flag: "🇧🇷",
                 steps: [
-                    "1) TOQUE NOS <span class='purple-text'>TRÊS PONTINHOS</span> (CANTO SUPERIOR)",
-                    "2) ESCOLHA <span class='purple-text'>\"ABRIR NO NAVEGADOR\"</span>",
-                    "3) O BOTÃO FICARÁ <span class='purple-text'>ROXO AUTOMATICAMENTE</span>"
+                    "1) TOQUE NOS <span class='purple-bold'>TRÊS PONTINHOS</span> (CANTO SUPERIOR)",
+                    "2) ESCOLHA <span class='purple-bold'>\"ABRIR NO NAVEGADOR\"</span>",
+                    "3) O BOTÃO FICARÁ <span class='purple-bold'>ROXO AUTOMATICAMENTE</span>"
                 ]
             },
             es: {
-                title: "SIGA EL TUTORIAL",
+                main: "SIGA EL TUTORIAL",
                 footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR",
                 flag: "🇪🇸",
                 steps: [
-                    "1) TOQUE LOS <span class='purple-text'>TRES PUNTOS</span> (ESQUINA SUPERIOR)",
-                    "2) ELIJA <span class='purple-text'>\"ABRIR EN EL NAVEGADOR\"</span>",
-                    "3) EL BOTÓN SE VOLVERÁ <span class='purple-text'>PÚRPURA AUTOMÁTICAMENTE</span>"
+                    "1) TOQUE LOS <span class='purple-bold'>TRES PUNTOS</span> (ESQUINA SUPERIOR)",
+                    "2) ELIJA <span class='purple-bold'>\"ABRIR EN EL NAVEGADOR\"</span>",
+                    "3) EL BOTÓN SE VOLVERÁ <span class='purple-bold'>PÚRPURA AUTOMÁTICAMENTE</span>"
                 ]
             },
             en: {
-                title: "FOLLOW THE TUTORIAL",
+                main: "FOLLOW THE TUTORIAL",
                 footer: "OPEN IN BROWSER TO CONTINUE",
                 flag: "🇺🇸",
                 steps: [
-                    "1) TAP THE <span class='purple-text'>THREE DOTS</span> (TOP CORNER)",
-                    "2) CHOOSE <span class='purple-text'>\"OPEN IN BROWSER\"</span>",
-                    "3) THE BUTTON WILL TURN <span class='purple-text'>PURPLE AUTOMATICALLY</span>"
+                    "1) TAP THE <span class='purple-bold'>THREE DOTS</span> (TOP CORNER)",
+                    "2) CHOOSE <span class='purple-bold'>\"OPEN IN BROWSER\"</span>",
+                    "3) THE BUTTON WILL TURN <span class='purple-bold'>PURPLE AUTOMATICALLY</span>"
                 ]
             }
         };
 
-        function changeLang(l) {
-            document.getElementById('flag').innerText = texts[l].flag;
-            document.getElementById('lang-code').innerText = l.toUpperCase();
-            document.getElementById('txt-title').innerText = texts[l].title;
-            document.getElementById('txt-footer').innerText = texts[l].footer;
-            document.getElementById('instr').innerHTML = texts[l].steps.map(s => `<div class="step-line">${s}</div>`).join('');
-            document.getElementById('dd').style.display = 'none';
+        function toggleDD() {
+            const dd = document.getElementById('myDD');
+            dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
         }
 
-        // --- LÓGICA DE DETECÇÃO CORRIGIDA ---
+        function setLang(l) {
+            document.getElementById('flag-now').innerText = langData[l].flag;
+            document.getElementById('label-now').innerText = l.toUpperCase();
+            document.getElementById('t-main').innerText = langData[l].main;
+            document.getElementById('t-footer').innerText = langData[l].footer;
+            document.getElementById('t-steps').innerHTML = langData[l].steps.map(s => `<p>${s}</p>`).join('');
+            document.getElementById('myDD').style.display = 'none';
+        }
+
+        function goToTelegram() {
+            window.location.href = linkDestino;
+        }
+
+        // Inicia em PT
+        setLang('pt');
+
+        // Lógica: Se não for TikTok/Instagram, redireciona após 2 segundos
         const ua = navigator.userAgent || navigator.vendor || window.opera;
-        // Se encontrar qualquer uma dessas palavras, é navegador interno (bloqueado)
-        const isBlocked = /TikTok|Instagram|FBAV|FBAN|Messenger|Threads|Snapchat/i.test(ua);
+        const isApp = /TikTok|Instagram|FBAV|FBAN/i.test(ua);
 
-        if (isBlocked) {
-            // MOSTRA A TELA
-            document.getElementById('main-container').style.display = 'flex';
-            changeLang('pt');
-        } else {
-            // SAIU DO APP, REDIRECIONA PRO TELEGRAM
-            window.location.replace(linkTelegram);
+        if (!isApp) {
+            setTimeout(() => {
+                window.location.replace(linkDestino);
+            }, 2000); // 2 segundos para o usuário ver a tela antes de ir pro bot
         }
-
-        // Fecha dropdown se clicar fora
-        window.onclick = function(e) { 
-            if(!e.target.closest('.header')) document.getElementById('dd').style.display='none'; 
-        };
     </script>
 </body>
 </html>
