@@ -6,277 +6,241 @@
     <title>Acessar Conteúdo</title>
     <style>
         :root {
-            --primary-purple: #8a2be2;
-            --bg-black: #0d0d0d;
-            --card-bg: #1a1a1a;
+            --primary-purple: #a855f7;
+            --bg-black: #0a0a0a;
+            --card-bg: #171717;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-black);
             color: #fff;
             display: flex;
             justify-content: center;
-            align-items: center;
             min-height: 100vh;
         }
 
-        /* --- CONTAINER PRINCIPAL --- */
         #main-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             padding: 20px;
-            display: none; /* JS controla a exibição */
+            display: none; /* JS ativa como 'flex' */
             flex-direction: column;
             align-items: center;
         }
 
-        /* --- HEADER / IDIOMA --- */
-        .header-nav {
+        /* HEADER */
+        .header {
             width: 100%;
             display: flex;
             justify-content: flex-end;
+            margin-bottom: 30px;
             position: relative;
-            margin-bottom: 20px;
         }
 
-        .lang-selector {
+        .lang-btn {
             background: #262626;
-            padding: 8px 12px;
-            border-radius: 20px;
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
+            border: 1px solid #333;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            border: 1px solid #444;
+            gap: 6px;
         }
 
-        .lang-dropdown {
+        .dropdown {
             display: none;
             position: absolute;
             top: 45px;
             right: 0;
             background: #262626;
             border-radius: 12px;
-            overflow: hidden;
-            z-index: 100;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 999;
+            border: 1px solid #444;
+            min-width: 100px;
         }
 
-        .lang-option {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: background 0.3s;
+        .dropdown div {
+            padding: 12px;
+            border-bottom: 1px solid #333;
+            text-align: center;
         }
 
-        .lang-option:hover { background: #333; }
-
-        /* --- CONTEÚDO --- */
-        .title {
-            text-transform: uppercase;
-            font-weight: 800;
+        /* CONTEÚDO IGUAL A PRINT */
+        .title-top {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
             letter-spacing: 1px;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
         }
 
-        .video-preview {
+        .preview-box {
             width: 100%;
-            aspect-ratio: 16/9;
             background: #000;
-            border-radius: 15px;
+            border-radius: 20px;
+            height: 200px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
-            border: 1px solid #333;
+            margin-bottom: 25px;
         }
 
-        .check-circle {
-            width: 80px;
-            height: 80px;
-            background: #57d4a4;
+        .check-icon {
+            width: 90px;
+            height: 90px;
+            background: #4ade80;
             border-radius: 50%;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 40px;
-            color: #fff;
-            box-shadow: 0 0 30px rgba(87, 212, 164, 0.3);
+            justify-content: center;
+            font-size: 45px;
         }
 
-        /* --- BOX TUTORIAL --- */
-        .tutorial-box {
+        .instruction-card {
             background: var(--card-bg);
-            border-left: 4px solid var(--primary-purple);
+            border-left: 5px solid var(--primary-purple);
             border-radius: 15px;
-            padding: 20px;
+            padding: 25px;
             width: 100%;
-            text-align: left;
             margin-bottom: 30px;
         }
 
-        .step {
+        .step-line {
             margin-bottom: 15px;
             font-size: 15px;
-            line-height: 1.4;
-            color: #ccc;
+            font-weight: 500;
         }
 
-        .step:last-child { margin-bottom: 0; }
+        .purple-text { color: var(--primary-purple); font-weight: 800; }
 
-        .highlight {
-            color: var(--primary-purple);
-            font-weight: bold;
-        }
-
-        /* --- BOTÃO DE CARREGAMENTO --- */
-        .btn-loading {
+        /* LOADING */
+        .loading-bar {
             width: 100%;
             background: #262626;
-            border: none;
-            padding: 18px;
+            padding: 20px;
             border-radius: 15px;
-            color: #fff;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+            justify-content: center;
         }
 
-        .spinner {
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255,255,255,0.1);
+        .loader-circle {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #444;
             border-top: 3px solid #888;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
-        .btn-text-bottom {
+        .footer-text {
+            margin-top: 25px;
             color: var(--primary-purple);
-            text-transform: uppercase;
-            font-weight: bold;
+            font-weight: 800;
             font-size: 13px;
-            margin-top: 20px;
-            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div id="main-container">
-        <div class="header-nav">
-            <div class="lang-selector" onclick="toggleLang()">
-                <span id="current-flag">🇧🇷</span> <span id="current-label">PT</span>
+        <div class="header">
+            <div class="lang-btn" onclick="document.getElementById('dd').style.display='block'">
+                <span id="flag">🇧🇷</span> <span id="lang-code">PT</span>
             </div>
-            <div class="lang-dropdown" id="lang-dropdown">
-                <div class="lang-option" onclick="setLang('pt')"><span>🇧🇷</span> PT</div>
-                <div class="lang-option" onclick="setLang('es')"><span>🇪🇸</span> ES</div>
-                <div class="lang-option" onclick="setLang('en')"><span>🇺🇸</span> EN</div>
+            <div class="dropdown" id="dd">
+                <div onclick="changeLang('pt')">🇧🇷 PT</div>
+                <div onclick="changeLang('es')">🇪🇸 ES</div>
+                <div onclick="changeLang('en')">🇺🇸 EN</div>
             </div>
         </div>
 
-        <div class="title" id="txt-title">Siga o Tutorial</div>
+        <div class="title-top" id="txt-title">SIGA O TUTORIAL</div>
 
-        <div class="video-preview">
-            <div class="check-circle">✓</div>
+        <div class="preview-box">
+            <div class="check-icon">✓</div>
         </div>
 
-        <div class="tutorial-box" id="tutorial-content">
+        <div class="instruction-card" id="instr">
             </div>
 
-        <div class="btn-loading">
-            <div class="spinner"></div>
+        <div class="loading-bar">
+            <div class="loader-circle"></div>
         </div>
 
-        <div class="btn-text-bottom" id="txt-footer">Abra no navegador para continuar</div>
+        <div class="footer-text" id="txt-footer">ABRA NO NAVEGADOR PARA CONTINUAR</div>
     </div>
 
     <script>
-        const destination = "https://t.me/marianasapequinha_bot";
+        const linkTelegram = "https://t.me/marianasapequinha_bot";
         
-        const translations = {
+        const texts = {
             pt: {
-                title: "Siga o Tutorial",
-                footer: "Abra no navegador para continuar",
+                title: "SIGA O TUTORIAL",
+                footer: "ABRA NO NAVEGADOR PARA CONTINUAR",
+                flag: "🇧🇷",
                 steps: [
-                    "1) Toque nos <span class='highlight'>TRÊS PONTINHOS</span> (canto superior)",
-                    "2) Escolha <span class='highlight'>\"ABRIR NO NAVEGADOR\"</span>",
-                    "3) O botão ficará <span class='highlight'>ROXO AUTOMATICAMENTE</span>"
+                    "1) TOQUE NOS <span class='purple-text'>TRÊS PONTINHOS</span> (CANTO SUPERIOR)",
+                    "2) ESCOLHA <span class='purple-text'>\"ABRIR NO NAVEGADOR\"</span>",
+                    "3) O BOTÃO FICARÁ <span class='purple-text'>ROXO AUTOMATICAMENTE</span>"
                 ]
             },
             es: {
-                title: "Siga el Tutorial",
-                footer: "Abrir en el navegador para continuar",
+                title: "SIGA EL TUTORIAL",
+                footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR",
+                flag: "🇪🇸",
                 steps: [
-                    "1) Toque los <span class='highlight'>TRES PUNTOS</span> (esquina superior)",
-                    "2) Elija <span class='highlight'>\"ABRIR EN EL NAVEGADOR\"</span>",
-                    "3) El botón se volverá <span class='highlight'>PÚRPURA AUTOMÁTICAMENTE</span>"
+                    "1) TOQUE LOS <span class='purple-text'>TRES PUNTOS</span> (ESQUINA SUPERIOR)",
+                    "2) ELIJA <span class='purple-text'>\"ABRIR EN EL NAVEGADOR\"</span>",
+                    "3) EL BOTÓN SE VOLVERÁ <span class='purple-text'>PÚRPURA AUTOMÁTICAMENTE</span>"
                 ]
             },
             en: {
-                title: "Follow the Tutorial",
-                footer: "Open in browser to continue",
+                title: "FOLLOW THE TUTORIAL",
+                footer: "OPEN IN BROWSER TO CONTINUE",
+                flag: "🇺🇸",
                 steps: [
-                    "1) Tap the <span class='highlight'>THREE DOTS</span> (top corner)",
-                    "2) Choose <span class='highlight'>\"OPEN IN BROWSER\"</span>",
-                    "3) The button will turn <span class='highlight'>PURPLE AUTOMATICALLY</span>"
+                    "1) TAP THE <span class='purple-text'>THREE DOTS</span> (TOP CORNER)",
+                    "2) CHOOSE <span class='purple-text'>\"OPEN IN BROWSER\"</span>",
+                    "3) THE BUTTON WILL TURN <span class='purple-text'>PURPLE AUTOMATICALLY</span>"
                 ]
             }
         };
 
-        function toggleLang() {
-            const dd = document.getElementById('lang-dropdown');
-            dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        function changeLang(l) {
+            document.getElementById('flag').innerText = texts[l].flag;
+            document.getElementById('lang-code').innerText = l.toUpperCase();
+            document.getElementById('txt-title').innerText = texts[l].title;
+            document.getElementById('txt-footer').innerText = texts[l].footer;
+            document.getElementById('instr').innerHTML = texts[l].steps.map(s => `<div class="step-line">${s}</div>`).join('');
+            document.getElementById('dd').style.display = 'none';
         }
 
-        function setLang(lang) {
-            const data = translations[lang];
-            document.getElementById('txt-title').innerText = data.title;
-            document.getElementById('txt-footer').innerText = data.footer;
-            
-            const flagMap = { pt: '🇧🇷 PT', es: '🇪🇸 ES', en: '🇺🇸 EN' };
-            document.getElementById('current-label').innerText = lang.toUpperCase();
-            document.getElementById('current-flag').innerText = flagMap[lang].split(' ')[0];
-
-            const tutorial = document.getElementById('tutorial-content');
-            tutorial.innerHTML = data.steps.map(s => `<div class="step">${s}</div>`).join('');
-            
-            document.getElementById('lang-dropdown').style.display = 'none';
-        }
-
-        // Lógica de Redirecionamento
+        // --- LÓGICA DE DETECÇÃO CORRIGIDA ---
         const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const isInApp = /TikTok|Instagram|FBAN|FBAV|Twitter/i.test(ua);
+        // Se encontrar qualquer uma dessas palavras, é navegador interno (bloqueado)
+        const isBlocked = /TikTok|Instagram|FBAV|FBAN|Messenger|Threads|Snapchat/i.test(ua);
 
-        if (isInApp) {
-            // Se estiver no App, mostra o muro
+        if (isBlocked) {
+            // MOSTRA A TELA
             document.getElementById('main-container').style.display = 'flex';
-            setLang('pt'); // Padrão Brasil
+            changeLang('pt');
         } else {
-            // Se estiver no navegador real, redireciona
-            window.location.replace(destination);
+            // SAIU DO APP, REDIRECIONA PRO TELEGRAM
+            window.location.replace(linkTelegram);
         }
 
-        // Fecha o dropdown ao clicar fora
-        window.onclick = function(event) {
-            if (!event.target.closest('.lang-selector')) {
-                document.getElementById('lang-dropdown').style.display = 'none';
-            }
-        }
+        // Fecha dropdown se clicar fora
+        window.onclick = function(e) { 
+            if(!e.target.closest('.header')) document.getElementById('dd').style.display='none'; 
+        };
     </script>
 </body>
 </html>
