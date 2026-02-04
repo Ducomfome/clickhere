@@ -21,7 +21,6 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         #muro-container {
@@ -33,7 +32,6 @@
             align-items: center;
         }
 
-        /* Idioma */
         .header {
             width: 100%;
             display: flex;
@@ -64,7 +62,6 @@
             border-radius: 10px;
             z-index: 100;
             border: 1px solid #444;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .dropdown div {
@@ -73,9 +70,6 @@
             border-bottom: 1px solid #333;
         }
 
-        .dropdown div:last-child { border-bottom: none; }
-
-        /* Estética do Muro */
         .main-title {
             font-size: 18px;
             font-weight: 800;
@@ -106,10 +100,8 @@
             justify-content: center;
             font-size: 45px;
             color: #fff;
-            box-shadow: 0 0 30px rgba(74, 222, 128, 0.2);
         }
 
-        /* Card de Instruções */
         .tutorial-card {
             background: var(--card);
             border: 1.5px solid var(--borda-card);
@@ -128,14 +120,8 @@
             line-height: 1.4;
         }
 
-        .tutorial-card p:last-child { margin-bottom: 0; }
+        .purple-tag { color: #a855f7; font-weight: 800; }
 
-        .purple-tag {
-            color: #a855f7;
-            font-weight: 800;
-        }
-
-        /* Botão de Ação */
         #main-btn {
             width: 100%;
             background: #222;
@@ -147,14 +133,13 @@
             border: none;
             color: #fff;
             font-weight: bold;
-            transition: all 0.3s ease;
             text-transform: uppercase;
             font-size: 15px;
         }
 
         .btn-active {
             background: var(--roxo) !important;
-            cursor: pointer;
+            cursor: pointer !important;
             box-shadow: 0 0 25px rgba(138, 43, 226, 0.4);
         }
 
@@ -173,7 +158,6 @@
             font-weight: 800;
             text-transform: uppercase;
             font-size: 13px;
-            letter-spacing: 0.5px;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -199,8 +183,7 @@
             <div class="check-icon">✓</div>
         </div>
 
-        <div class="tutorial-card" id="txt-steps">
-            </div>
+        <div class="tutorial-card" id="txt-steps"></div>
 
         <button id="main-btn">
             <div class="loader" id="btn-loader"></div>
@@ -214,36 +197,9 @@
         const REDIRECT_URL = "https://t.me/marianasapequinha_bot";
 
         const translations = {
-            pt: {
-                title: "SIGA O TUTORIAL",
-                footer: "ABRA NO NAVEGADOR PARA CONTINUAR",
-                btn: "ACESSAR AGORA",
-                steps: [
-                    "1) TOQUE NOS <span class='purple-tag'>TRÊS PONTINHOS</span> (SUPERIOR)",
-                    "2) ESCOLHA <span class='purple-tag'>\"ABRIR NO NAVEGADOR\"</span>",
-                    "3) O BOTÃO FICARÁ <span class='purple-tag'>ROXO AUTOMATICAMENTE</span>"
-                ]
-            },
-            es: {
-                title: "SIGA EL TUTORIAL",
-                footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR",
-                btn: "ACCEDER AHORA",
-                steps: [
-                    "1) TOQUE LOS <span class='purple-tag'>TRES PUNTOS</span> (SUPERIOR)",
-                    "2) ELIJA <span class='purple-tag'>\"ABRIR EN EL NAVEGADOR\"</span>",
-                    "3) EL BOTÓN SE VOLVERÁ <span class='purple-tag'>PÚRPURA AUTOMÁTICAMENTE</span>"
-                ]
-            },
-            en: {
-                title: "FOLLOW THE TUTORIAL",
-                footer: "OPEN IN BROWSER TO CONTINUE",
-                btn: "ACCESS NOW",
-                steps: [
-                    "1) TAP THE <span class='purple-tag'>THREE DOTS</span> (TOP CORNER)",
-                    "2) CHOOSE <span class='purple-tag'>\"OPEN IN BROWSER\"</span>",
-                    "3) THE BUTTON WILL TURN <span class='purple-tag'>PURPLE AUTOMATICALLY</span>"
-                ]
-            }
+            pt: { title: "SIGA O TUTORIAL", footer: "ABRA NO NAVEGADOR PARA CONTINUAR", btn: "ACESSAR AGORA", flag: "🇧🇷", steps: ["1) TOQUE NOS <span class='purple-tag'>TRÊS PONTINHOS</span> (SUPERIOR)", "2) ESCOLHA <span class='purple-tag'>\"ABRIR NO NAVEGADOR\"</span>", "3) O BOTÃO FICARÁ <span class='purple-tag'>ROXO AUTOMATICAMENTE</span>"] },
+            es: { title: "SIGA EL TUTORIAL", footer: "ABRIR EN EL NAVEGADOR PARA CONTINUAR", btn: "ACCEDER AHORA", flag: "🇪🇸", steps: ["1) TOQUE LOS <span class='purple-tag'>TRES PUNTOS</span> (SUPERIOR)", "2) ELIJA <span class='purple-tag'>\"ABRIR EN EL NAVEGADOR\"</span>", "3) EL BOTÓN SE VOLVERÁ <span class='purple-tag'>PÚRPURA AUTOMÁTICAMENTE</span>"] },
+            en: { title: "FOLLOW THE TUTORIAL", footer: "OPEN IN BROWSER TO CONTINUE", btn: "ACCESS NOW", flag: "🇺🇸", steps: ["1) TAP THE <span class='purple-tag'>THREE DOTS</span> (TOP CORNER)", "2) CHOOSE <span class='purple-tag'>\"OPEN IN BROWSER\"</span>", "3) THE BUTTON WILL TURN <span class='purple-tag'>PURPLE AUTOMATICALLY</span>"] }
         };
 
         function toggleDropdown() {
@@ -257,46 +213,30 @@
             document.getElementById('txt-footer').innerText = d.footer;
             document.getElementById('txt-steps').innerHTML = d.steps.map(s => `<p>${s}</p>`).join('');
             document.getElementById('cur-lang').innerText = lang.toUpperCase();
-            document.getElementById('cur-flag').innerText = lang === 'pt' ? '🇧🇷' : lang === 'es' ? '🇪🇸' : '🇺🇸';
+            document.getElementById('cur-flag').innerText = d.flag;
             document.getElementById('btn-text').innerText = d.btn;
             document.getElementById('lang-dd').style.display = 'none';
         }
 
-        // --- SISTEMA DE DETECÇÃO ANTI-TIKTOK ---
-        function runProtection() {
+        function checkEnvironment() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            
-            // Detecta se está em navegadores internos (TikTok, Instagram, FB, etc)
-            const isAppBrowser = /TikTok|Instagram|FBAN|FBAV|Messenger|Line|Snapchat/i.test(ua);
-            
-            // Checa se é um WebView genérico (iPhone/Android)
+            const isApp = /TikTok|Instagram|FBAN|FBAV|Messenger|Line|Snapchat/i.test(ua);
             const isWebView = /iPhone|iPod|iPad/.test(ua) ? (!window.navigator.standalone && !/Safari/.test(ua)) : /wv/.test(ua);
 
-            if (!isAppBrowser && !isWebView) {
-                // ESTÁ NO NAVEGADOR REAL (Chrome/Safari)
+            // Se NÃO estiver no app e NÃO for webview (ou seja, navegador real)
+            if (!isApp && !isWebView) {
                 const btn = document.getElementById('main-btn');
                 btn.classList.add('btn-active');
                 document.getElementById('btn-loader').style.display = 'none';
                 document.getElementById('btn-text').style.display = 'block';
-
-                // Ativa o clique
+                
                 btn.onclick = () => { window.location.href = REDIRECT_URL; };
-
-                // Redireciona sozinho após 1.2 segundos
-                setTimeout(() => {
-                    window.location.replace(REDIRECT_URL);
-                }, 1200);
-            } else {
-                // ESTÁ PRESO NO TIKTOK
-                console.log("Ambiente restrito detectado. Aguardando navegador externo.");
             }
         }
 
-        // Inicializar
         updateLang('pt');
-        runProtection();
+        checkEnvironment();
 
-        // Fechar dropdown ao clicar fora
         window.onclick = (e) => {
             if (!e.target.closest('.header')) document.getElementById('lang-dd').style.display = 'none';
         };
