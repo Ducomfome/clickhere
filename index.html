@@ -75,10 +75,10 @@
             letter-spacing: 1px;
         }
 
-        /* ÁREA DO GIF (ONDE ERA O CORRETO) */
+        /* ÁREA DO GIF 16:9 PREENCHENDO TUDO */
         .preview-box {
             width: 100%;
-            aspect-ratio: 16/10;
+            aspect-ratio: 16/9; /* Proporção exata */
             background: #000;
             border-radius: 15px;
             display: flex;
@@ -86,12 +86,15 @@
             align-items: center;
             margin-bottom: 25px;
             border: 1px solid #222;
-            overflow: hidden;
+            overflow: hidden; /* Garante que o GIF não saia da borda arredondada */
+            position: relative;
         }
 
         .gif-principal {
-            width: 100px; /* Ajuste o tamanho conforme sua preferência */
-            height: auto;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Faz o GIF preencher todo o quadrado sem distorcer */
+            display: block;
         }
 
         /* CARD TUTORIAL */
